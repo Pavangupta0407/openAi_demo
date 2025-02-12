@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ai.services.OpenAiService;
-import com.ai.text.prompttemplate.dto.CountryCuisines;
+import com.ai.text.prompttemplate.dto.countryCuisines;
 
 @Controller
 public class CuisineHelperController {
@@ -23,7 +23,8 @@ public class CuisineHelperController {
     @PostMapping("/cuisineHelper")
     public String getChatResponse(@RequestParam("country") String country, @RequestParam("numCuisines") String numCuisines,@RequestParam("language") String language,Model model) {
    
-    	CountryCuisines response = chatService.getCuisines(country,numCuisines,language);
+    	countryCuisines response = chatService.getCuisines(country,numCuisines,language);
+    	model.addAttribute("countryCuisines",response);
         return "cuisineHelper";
     }
 }

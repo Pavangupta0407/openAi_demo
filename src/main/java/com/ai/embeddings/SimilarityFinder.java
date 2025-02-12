@@ -23,6 +23,10 @@ public class SimilarityFinder {
 
 	@PostMapping("/similarityFinder")
 	public String findSimilarity(@RequestParam String text1,@RequestParam String text2,Model model) {
+		double response = service.findSimilarity(text1, text2);
+		response = response*100;
+		String res = response+"%";
+		model.addAttribute("response",res);
 		return "similarityFinder";
 
 	}
