@@ -1,5 +1,11 @@
 package com.ai.speech;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +21,7 @@ import com.ai.services.OpenAiService;
 public class SpeechToTextController {
 
     // Define the folder where images will be saved
-    private static final String UPLOAD_DIR = "/Users/bharaththippireddy/Documents/springai/images/uploads/";
+    private static final String UPLOAD_DIR = "C:\\Users\\Pavan\\Pictures\\Nitro";
     
     @Autowired
     private OpenAiService service;
@@ -27,8 +33,27 @@ public class SpeechToTextController {
     }
 
     @PostMapping("/speechToText")
-    public String uploadImage(String prompt, @RequestParam("file") MultipartFile file, Model model, 
+    public String speechToText(@RequestParam("file") MultipartFile file, Model model, 
     		RedirectAttributes redirectAttributes) {
-        return "speechToText";
+    	if(file.isEmpty()) {
+    		model.addAttribute("message","Please select a file to upload");
+    		return "imageAnalyzer";
+    	}
+    	
+    	try {
+    		Path uploadDir = Paths.get(UPLOAD_DIR);
+    		if(Files.notExists(uploadDir)) {
+    			Files.createDirectories(uploadDir);
+    		}
+    		Path path = uploadDir.resolve(file.getOriginalFilename());
+    		Files.write(path, file.getBytes(), StandardOpenOption.CREATE);
+    	
+    		String transcription = service.speechToText(path.toString());
+    		model.addAttribute("transcription",transcription);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		model.addAttribute("message","Failed to upload file");
+    	}
+    	return "speechToText";
     }
 }

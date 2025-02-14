@@ -12,17 +12,21 @@ import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 
-@Component
+//@Component
 public class DataInitializer {
 
-	@Autowired
-	private VectorStore vectorStore;
-	
-	@PostConstruct
-	public void init() {
-		TextReader textReader = new TextReader(new ClassPathResource("job_listings.txt"));
-		TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(100, 100, 5, 1000, true);
-		List<Document> documents = tokenTextSplitter.split(textReader.get());
-		vectorStore.add(documents);
-	}
+//	@Autowired
+//	private VectorStore vectorStore;
+//	
+//	//@PostConstruct
+//	public void init() {
+//		TextReader textReader = new TextReader(new ClassPathResource("job_listings.txt"));
+//		TokenTextSplitter tokenTextSplitter = new TokenTextSplitter(100, 100, 5, 1000, true);
+//		List<Document> documents = tokenTextSplitter.split(textReader.get());
+//		vectorStore.add(documents);
+//		
+//		TextReader productData = new TextReader(new ClassPathResource("product-data.txt"));
+//		documents = tokenTextSplitter.split(productData.get());
+//		vectorStore.add(documents);
+//	}
 }

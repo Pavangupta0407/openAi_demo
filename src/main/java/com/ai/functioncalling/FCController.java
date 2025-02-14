@@ -22,6 +22,7 @@ public class FCController {
 
 	@PostMapping("/functionCalling")
 	public String getChatResponse(@RequestParam("company") String company, Model model) {
+		model.addAttribute("response",service.getStockPrice(company));
 		return "functionCalling";
 	}
 

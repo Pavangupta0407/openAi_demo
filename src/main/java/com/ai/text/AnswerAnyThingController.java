@@ -24,7 +24,6 @@ public class AnswerAnyThingController {
     @PostMapping("/askAnything")
     public String askAnything(@RequestParam("question") String question, Model model) {
     	ChatResponse response = service.generateAnswer(question);
-    	System.out.print(response);
     	model.addAttribute("question", question);
     	model.addAttribute("answer", response.getResult().getOutput().getContent());
         return "askAnything";

@@ -23,6 +23,7 @@ public class ImageGenerationController {
 
 	@PostMapping("/imageGenerator")
 	public String imageGenerator(@RequestParam String prompt, Model model) {
+		model.addAttribute("response",service.generateImage(prompt));
 		return "imageGenerator";
 
 	}

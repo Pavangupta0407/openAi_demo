@@ -15,6 +15,7 @@ public class StockRetrievalService implements Function<Request, Response> {
 
 	@Override
 	public Response apply(Request t) {
+		//Here its a dummy call instead we can make a call to any finance api
 		return new Response(5000D);
 	}
 

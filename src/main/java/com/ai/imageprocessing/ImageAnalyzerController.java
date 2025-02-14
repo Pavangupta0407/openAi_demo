@@ -1,5 +1,11 @@
 package com.ai.imageprocessing;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +20,7 @@ import com.ai.services.OpenAiService;
 @Controller
 public class ImageAnalyzerController {
 
-    private static final String UPLOAD_DIR = "/Users/bharaththippireddy/Documents/springai/images/uploads/";
+    private static final String UPLOAD_DIR = "C:\\Users\\Pavan\\Pictures\\Nitro";
     
     @Autowired
     private OpenAiService service;
@@ -27,7 +33,25 @@ public class ImageAnalyzerController {
 
     @PostMapping("/imageAnalyzer")
     public String uploadImage(String prompt, @RequestParam("file") MultipartFile file, Model model, RedirectAttributes redirectAttributes) {
-
+    	if(file.isEmpty()) {
+    		model.addAttribute("message","Please select a file to upload");
+    		return "imageAnalyzer";
+    	}
+    	
+    	try {
+    		Path uploadDir = Paths.get(UPLOAD_DIR);
+    		if(Files.notExists(uploadDir)) {
+    			Files.createDirectories(uploadDir);
+    		}
+    		Path path = uploadDir.resolve(file.getOriginalFilename());
+    		Files.write(path, file.getBytes(), StandardOpenOption.CREATE);
+    	
+    		String explainImage = service.explainImage(prompt,path.toString());
+    		model.addAttribute("explanation",explainImage);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		model.addAttribute("message","Failed to upload file");
+    	}
 
         return "imageAnalyzer";
     }
